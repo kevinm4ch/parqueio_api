@@ -27,7 +27,7 @@ DEBUG = False
 
 APPEND_SLASH = False
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'parqueio.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com']
 
 
 # Application definition
