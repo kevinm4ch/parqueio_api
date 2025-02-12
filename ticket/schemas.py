@@ -1,15 +1,13 @@
 from datetime import datetime
 from ninja import Schema
 
+from patio.models import Patio
 from patio.schemas import PatioOut
-from .models import Ticket
+from .models import Ticket, Veiculo
 
 class TicketIn(Schema):
-    codigo: str
-    patio: int
-    veiculo: int
-    saida: datetime = None
-    valor_pago: float = None
+    patio: int = any
+    veiculo: int = any
 
 class VeiculoOut(Schema):
     id: int

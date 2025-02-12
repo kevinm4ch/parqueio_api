@@ -6,7 +6,7 @@ class Veiculo(models.Model):
     descricao = models.CharField(max_length=20)
 
 class Ticket(models.Model):
-    codigo = models.CharField(max_length=6)
+    codigo = models.CharField(max_length=10)
     patio = models.ForeignKey(Patio, on_delete=models.CASCADE)   
     entrada = models.DateTimeField(default=timezone.now)
     saida = models.DateTimeField(null=True, blank=True)

@@ -8,6 +8,4 @@ class Patio(models.Model):
     data_criacao = models.DateTimeField(default=timezone.now)
     data_atualizacao = models.DateTimeField(null=True, blank=True)
 
-    def __str__(self):
-        return self.descricao
     
