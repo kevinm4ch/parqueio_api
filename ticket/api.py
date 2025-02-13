@@ -15,13 +15,6 @@ router = Router()
 def gerar_codigo():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
-def service_unavailable(request, exc):
-    return api.create_response(
-        request,
-        {"message": "Please retry later"},
-        status=503,
-    )
-
 @router.get("", response=List[TicketOut])
 def listar_tickets(request):
     qs = Ticket.objects.all
