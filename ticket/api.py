@@ -4,7 +4,7 @@ import random
 import string
 
 from django.shortcuts import get_object_or_404
-from ninja import Router
+from ninja import NinjaAPI, Router
 
 from .schemas import *
 from .models import *
@@ -14,6 +14,13 @@ router = Router()
 
 def gerar_codigo():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
+def service_unavailable(request, exc):
+    return api.create_response(
+        request,
+        {"message": "Please retry later"},
+        status=503,
+    )
 
 @router.get("", response=List[TicketOut])
 def listar_tickets(request):
@@ -32,7 +39,9 @@ def novo_ticket(request, payload: TicketIn):
     patio = get_object_or_404(Patio, id=payload.patio)
 
     if(patio.vagas_ocupadas == patio.quantidade_vagas):
-        return {"success": False, "message": "Pátio lotado"}
+        # Retornando um erro 409 que indica um conflito no estado atual ou seja é preciso que uma vaga seja desocupada
+        api = NinjaAPI()
+        return api.create_response(request, data={"success": False, "message": "Pátio lotado"},status=409)
 
     #passa os objetos no lugar dos indices que vem no input
     payload.veiculo = veiculo
@@ -61,7 +70,8 @@ def pagar_ticket(request, ticket_cod:str, payload: TicketPay):
     ticket = get_object_or_404(Ticket, codigo=ticket_cod)
 
     if(not ticket.ativo):
-        return {"success": False, "message": "Ticket não encontrado"}
+        api = NinjaAPI()
+        return api.create_response(request, data={"Success": False,"message": "Ticket não encontrado"}, status=404)
 
     # Altera o Ticket
     ticket.valor_pago = payload.valor_pago
