@@ -31,6 +31,9 @@ def novo_ticket(request, payload: TicketIn):
     veiculo = get_object_or_404(Veiculo, id=payload.veiculo)
     patio = get_object_or_404(Patio, id=payload.patio)
 
+    if(patio.vagas_ocupadas == patio.quantidade_vagas):
+        return {"success": False, "message": "Pátio lotado"}
+
     #passa os objetos no lugar dos indices que vem no input
     payload.veiculo = veiculo
     payload.patio = patio
